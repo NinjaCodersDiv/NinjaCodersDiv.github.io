@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninja Coders | پایگاه مقالات برنامه نویسی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* هدر */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-left: 10px;
+        }
+        
+        /* منوی همبرگری */
+        .hamburger-menu {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li {
+            margin-right: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-color);
+            border-radius: 30px;
+            padding: 8px 15px;
+            width: 250px;
+        }
+        
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            padding: 5px;
+        }
+        
+        .search-box button {
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        
+        /* بنر */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* مقالات */
+        .articles {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .article-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .article-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .article-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .article-card:hover .article-image img {
+            transform: scale(1.1);
+        }
+        
+        .article-content {
+            padding: 20px;
+        }
+        
+        .article-category {
+            display: inline-block;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .article-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .article-title a {
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .article-title a:hover {
+            color: var(--primary-color);
+        }
+        
+        .article-excerpt {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .article-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .article-author img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-left: 10px;
+            object-fit: cover;
+        }
+        
+        /* صفحه مقاله کامل */
+        .article-detail {
+            display: none;
+            padding: 40px 0;
+        }
+        
+        .article-detail.active {
+            display: block;
+        }
+        
+        .article-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .article-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+        
+        .article-header .meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .article-header .author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .article-header .author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-left: 15px;
+            object-fit: cover;
+        }
+        
+        .article-header .date {
+            color: var(--text-light);
+        }
+        
+        .featured-image {
+            width: 100%;
+            height: 500px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .article-body {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .article-body p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .article-body h2, .article-body h3 {
+            margin: 30px 0 20px;
+            color: var(--dark-color);
+        }
+        
+        .back-to-articles {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .back-to-articles:hover {
+            color: var(--secondary-color);
+        }
+        
+        .back-to-articles i {
+            margin-right: 10px;
+        }
+        
+        /* فوتر */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 60px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* ریسپانسیو */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hamburger-menu {
+                display: block;
+                position: absolute;
+                left: 20px;
+                top: 15px;
+            }
+            
+            nav {
+                width: 100%;
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                padding: 20px 0;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+                text-align: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin-top: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .featured-image {
+                height: 300px;
+            }
+            
+            .article-body {
+                padding: 20px;
+            }
+            
+            .article-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر -->
+    <header>
+        <div class="container header-container">
+            <div class="hamburger-menu" id="hamburger-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <a href="#" class="logo" id="home-link">
+                <i class="fas fa-code"></i>
+                Ninja Coders
+            </a>
+            
+            <nav id="main-nav">
+                <ul>
+                    <li><a href="#" id="nav-home">خانه</a></li>
+                    <li><a href="#" id="nav-articles">مقالات</a></li>
+                    <li><a href="#">دسته‌بندی‌ها</a></li>
+                    <li><a href="#">درباره ما</a></li>
+                    <li><a href="#">تماس با ما</a></li>
+                </ul>
+            </nav>
+            
+            <div class="search-box">
+                <input type="text" placeholder="جستجوی مقالات...">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- بخش اصلی محتوا -->
+    <main id="app">
+        <!-- صفحه اصلی -->
+        <div id="home-page">
+            <!-- بنر اصلی -->
+            <section class="hero">
+                <div class="container">
+                    <h1>پایگاه مقالات برنامه نویسی Ninja Coders</h1>
+                    <p>در اینجا می‌توانید بهترین مقالات در زمینه‌های مختلف برنامه نویسی و تکنولوژی را مطالعه کنید و دانش خود را افزایش دهید.</p>
+                    <a href="#" class="btn" id="view-articles-btn">مشاهده مقالات</a>
+                </div>
+            </section>
+            
+            <!-- مقالات -->
+            <section class="articles">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>آخرین مقالات</h2>
+                    </div>
+                    
+                    <div class="articles-grid" id="articles-grid">
+                        <!-- مقالات با JavaScript پر می‌شوند -->
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- صفحه مقاله -->
+        <div id="article-page" class="article-detail">
+            <div class="container">
+                <a href="#" class="back-to-articles" id="back-to-articles">
+                    <i class="fas fa-arrow-right"></i> بازگشت به مقالات
+                </a>
+                
+                <div class="article-header">
+                    <h1 id="article-title">عنوان مقاله</h1>
+                    <div class="meta">
+                        <div class="author">
+                            <img src="" alt="نویسنده" id="article-author-img">
+                            <span id="article-author-name">نویسنده</span>
+                        </div>
+                        <div class="date" id="article-date">
+                            <i class="far fa-calendar-alt"></i> تاریخ انتشار
+                        </div>
+                        <div class="category" id="article-category">
+                            دسته‌بندی
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="featured-image">
+                    <img src="" alt="مقاله" id="article-featured-image">
+                </div>
+                
+                <div class="article-body" id="article-content">
+                    <!-- محتوای مقاله با JavaScript پر می‌شود -->
+                </div>
+                
+                <a href="#" class="back-to-articles" id="back-to-articles-bottom">
+                    <i class="fas fa-arrow-right"></i> بازگشت به مقالات
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <!-- فوتر -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>کلیه حقوق مادی و معنوی این سایت متعلق به Ninja Coders می‌باشد. © ۱۴۰۲</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // داده‌های نمونه برای مقالات
+        const articles = [
+            {
+                id: 1,
+                title: "۱۰ نکته کلیدی برای تبدیل شدن به یک برنامه‌نویس حرفه‌ای",
+                category: "برنامه‌نویسی",
+                excerpt: "در این مقاله به بررسی مهم‌ترین نکاتی می‌پردازیم که هر برنامه‌نویسی برای حرفه‌ای شدن باید بداند.",
+                image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                date: "۲۵ خرداد ۱۴۰۲",
+                author: "علی محمدی",
+                authorImage: "https://randomuser.me/api/portraits/men/32.jpg",
+                content: `
+                    <h2>مقدمه</h2>
+                    <p>تبدیل شدن به یک برنامه‌نویس حرفه‌ای نیازمند رعایت اصول و نکات مهمی است که در این مقاله به بررسی آنها می‌پردازیم. برنامه‌نویسی تنها نوشتن کد نیست، بلکه یک فرآیند پیچیده از حل مسئله، طراحی و پیاده‌سازی است.</p>
+                    
+                    <h2>۱. یادگیری مستمر</h2>
+                    <p>فناوری‌ها به سرعت در حال تغییر هستند. یک برنامه‌نویس حرفه‌ای باید همیشه در حال یادگیری تکنولوژی‌های جدید باشد. منابعی مانند مستندات رسمی، دوره‌های آنلاین و پروژه‌های متن‌باز می‌توانند کمک‌کننده باشند.</p>
+                    
+                    <h2>۲. درک عمیق مفاهیم پایه</h2>
+                    <p>قبل از یادگیری فریمورک‌ها و کتابخانه‌های جدید، باید مفاهیم پایه برنامه‌نویسی مانند الگوریتم‌ها، ساختار داده‌ها، طراحی شی‌گرا و الگوهای طراحی را به خوبی درک کنید.</p>
+                    
+                    <h2>۳. تمرین کدنویسی تمیز</h2>
+                    <p>کد شما باید خوانا، قابل نگهداری و با ساختار مناسب باشد. اصولی مانند SOLID، DRY و KISS را رعایت کنید و همیشه کد خود را بازبینی و بازنویسی کنید.</p>
+                    
+                    <h2>۴. کار با سیستم‌های کنترل نسخه</h2>
+                    <p>Git یک مهارت ضروری برای هر برنامه‌نویسی است. یاد بگیرید چگونه از Git برای مدیریت کد خود استفاده کنید و با مفاهیمی مانند branch، merge و rebase آشنا شوید.</p>
+                    
+                    <h2>۵. توسعه مهارت‌های حل مسئله</h2>
+                    <p>برنامه‌نویسی در اصل حل مسئله است. مهارت‌های تحلیلی خود را با حل چالش‌های برنامه‌نویسی در سایت‌هایی مانند LeetCode و HackerRank تقویت کنید.</p>
+                    
+                    <h2>۶. مشارکت در پروژه‌های متن‌باز</h2>
+                    <p>مشارکت در پروژه‌های متن‌باز نه تنها تجربه عملی ارزشمندی به شما می‌دهد، بلکه می‌تواند شبکه حرفه‌ای شما را نیز گسترش دهد.</p>
+                    
+                    <h2>۷. یادگیری کار تیمی</h2>
+                    <p>در محیط‌های حرفه‌ای، برنامه‌نویسان به صورت تیمی کار می‌کنند. یاد بگیرید چگونه با دیگران همکاری کنید، کد دیگران را بررسی کنید و از بازخوردها استقبال کنید.</p>
+                    
+                    <h2>۸. توجه به امنیت و کارایی</h2>
+                    <p>همیشه به جنبه‌های امنیتی و کارایی کد خود فکر کنید. یادگیری مفاهیم پایه امنیت نرم‌افزار و بهینه‌سازی کد می‌تواند از شما یک برنامه‌نویس بهتر بسازد.</p>
+                    
+                    <h2>۹. مستندسازی کد</h2>
+                    <p>کد بدون مستندات مانند یک کتاب بدون فهرست است. یاد بگیرید چگونه کد خود را به خوبی مستند کنید تا دیگران (و خود آینده‌تان) بتوانند آن را درک کنند.</p>
+                    
+                    <h2>۱۰. ساخت نمونه کار</h2>
+                    <p>یک پورتفولیو از پروژه‌های خود بسازید. این کار نه تنها مهارت‌های شما را نشان می‌دهد، بلکه فرصت‌های شغلی بهتری را برای شما ایجاد می‌کند.</p>
+                    
+                    <h2>نتیجه‌گیری</h2>
+                    <p>تبدیل شدن به یک برنامه‌نویس حرفه‌ای نیازمند زمان، تلاش و تعهد است. با رعایت این نکات و تمرین مستمر، می‌توانید به یک توسعه‌دهنده ماهر تبدیل شوید.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "آموزش React.js از پایه تا پیشرفته",
+                category: "فرانت‌اند",
+                excerpt: "یادگیری React.js را با این راهنمای جامع شروع کنید و به یک توسعه‌دهنده حرفه‌ای فرانت‌اند تبدیل شوید.",
+                image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                date: "۲۰ خرداد ۱۴۰۲",
+                author: "زهرا احمدی",
+                authorImage: "https://randomuser.me/api/portraits/women/68.jpg",
+                content: `
+                    <h2>مقدمه</h2>
+                    <p>React.js یکی از محبوب‌ترین کتابخانه‌های جاوااسکریپت برای ساخت رابط‌های کاربری است. در این مقاله به آموزش جامع React از مفاهیم پایه تا مباحث پیشرفته می‌پردازیم.</p>
+                    
+                    <h2>۱. معرفی React</h2>
+                    <p>React یک کتابخانه جاوااسکریپت برای ساخت رابط‌های کاربری است که توسط فیسبوک توسعه داده شده است. مزایای اصلی React شامل:</p>
+                    <ul>
+                        <li>یادگیری آسان</li>
+                        <li>قابلیت استفاده مجدد از کامپوننت‌ها</li>
+                        <li>عملکرد بالا با استفاده از Virtual DOM</li>
+                        <li>جامعه بزرگ توسعه‌دهندگان</li>
+                    </ul>
+                    
+                    <h2>۲. تنظیم محیط توسعه</h2>
+                    <p>برای شروع کار با React نیاز به نصب Node.js و npm دارید. سپس می‌توانید با دستور زیر یک پروژه جدید ایجاد کنید:</p>
+                    <pre><code>npx create-react-app my-app
+cd my-app
+npm start</code></pre>
+                    
+                    <h2>۳. مفاهیم پایه</h2>
+                    <p>مهم‌ترین مفاهیم پایه در React شامل:</p>
+                    <ul>
+                        <li>کامپوننت‌ها (Components)</li>
+                        <li>پراپس (Props)</li>
+                        <li>استیت (State)</li>
+                        <li>هوک‌ها (Hooks)</li>
+                        <li>رویدادها (Events)</li>
+                    </ul>
+                    
+                    <h2>۴. کار با کامپوننت‌ها</h2>
+                    <p>کامپوننت‌ها بلوک‌های سازنده برنامه‌های React هستند. یک کامپوننت ساده:</p>
+                    <pre><code>function Welcome(props) {
+  return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;
+}</code></pre>
+                    
+                    <h2>۵. مدیریت استیت با useState</h2>
+                    <p>هوک useState به شما امکان می‌دهد استیت را در کامپوننت‌های تابعی مدیریت کنید:</p>
+                    <pre><code>import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;You clicked {count} times&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;
+        Click me
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                    
+                    <h2>نتیجه‌گیری</h2>
+                    <p>React.js یک کتابخانه قدرتمند برای ساخت رابط‌های کاربری مدرن است. با یادگیری مفاهیم پایه و تمرین مستمر، می‌توانید به یک توسعه‌دهنده حرفه‌ای React تبدیل شوید.</p>
+                `
+            }
+        ];
+
+        // DOM Elements
+        const app = document.getElementById('app');
+        const homePage = document.getElementById('home-page');
+        const articlePage = document.getElementById('article-page');
+        const articlesGrid = document.getElementById('articles-grid');
+        const viewArticlesBtn = document.getElementById('view-articles-btn');
+        const homeLink = document.getElementById('home-link');
+        const navHome = document.getElementById('nav-home');
+        const navArticles = document.getElementById('nav-articles');
+        const backToArticles = document.getElementById('back-to-articles');
+        const backToArticlesBottom = document.getElementById('back-to-articles-bottom');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        // Render articles
+        function renderArticles() {
+            articlesGrid.innerHTML = '';
+            articles.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.className = 'article-card';
+                articleCard.innerHTML = `
+                    <div class="article-image">
+                        <img src="${article.image}" alt="${article.title}">
+                    </div>
+                    <div class="article-content">
+                        <span class="article-category">${article.category}</span>
+                        <h3 class="article-title">${article.title}</h3>
+                        <p class="article-excerpt">${article.excerpt}</p>
+                        <div class="article-meta">
+                            <span class="article-date"><i class="far fa-calendar-alt"></i> ${article.date}</span>
+                            <span class="article-author">
+                                <img src="${article.authorImage}" alt="${article.author}">
+                                ${article.author}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                articleCard.addEventListener('click', () => showArticle(article.id));
+                articlesGrid.appendChild(articleCard);
+            });
+        }
+
+        // Show article detail
+        function showArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (!article) return;
+
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-author-img').src = article.authorImage;
+            document.getElementById('article-author-img').alt = article.author;
+            document.getElementById('article-author-name').textContent = article.author;
+            document.getElementById('article-date').innerHTML = `<i class="far fa-calendar-alt"></i> ${article.date}`;
+            document.getElementById('article-category').textContent = article.category;
+            document.getElementById('article-featured-image').src = article.image;
+            document.getElementById('article-featured-image').alt = article.title;
+            document.getElementById('article-content').innerHTML = article.content;
+
+            homePage.style.display = 'none';
+            articlePage.classList.add('active');
+            mainNav.classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Show home page
+        function showHome() {
+            homePage.style.display = 'block';
+            articlePage.classList.remove('active');
+            mainNav.classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Toggle mobile menu
+        function toggleMenu() {
+            mainNav.classList.toggle('active');
+        }
+
+        // Event listeners
+        viewArticlesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('.articles').scrollIntoView({ behavior: 'smooth' });
+            mainNav.classList.remove('active');
+        });
+
+        homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+
+        navHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+
+        navArticles.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('.articles').scrollIntoView({ behavior: 'smooth' });
+            mainNav.classList.remove('active');
+        });
+
+        backToArticles.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+
+        backToArticlesBottom.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+
+        hamburgerMenu.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#main-nav') && !e.target.closest('#hamburger-menu')) {
+                mainNav.classList.remove('active');
+            }
+        });
+
+        // Initial render
+        renderArticles();
+    </script>
+</body>
+</html>
