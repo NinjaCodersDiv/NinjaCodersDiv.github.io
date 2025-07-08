@@ -542,7 +542,7 @@
                         <img src="${article.image_url || 'https://via.placeholder.com/80x50?text=بدون+تصویر'}" 
                              width="80" height="50" 
                              style="object-fit: cover; border-radius: 4px;"
-                             onerror="this.src='https://via.placeholder.com/80x50?text=خطا+در+تصویر'">
+                             onerror="this.src='https://via.placeholder.com/80x50?text=خطا+در+تصویر'" loading="lazy">
                     </td>
                     <td>${article.title}</td>
                     <td>${article.category}</td>
