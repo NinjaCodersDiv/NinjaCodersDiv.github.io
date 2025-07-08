@@ -465,10 +465,8 @@
     </div>
 
     <script>
-        // تنظیمات API
         const API_BASE_URL = 'https://ninja-api-w1ch.onrender.com'; // آدرس API خود را اینجا قرار دهید
         
-        // عناصر DOM
         const elements = {
             loader: document.getElementById('loader'),
             articlesList: document.getElementById('articles-list'),
@@ -480,9 +478,7 @@
             formTitle: document.getElementById('form-title'),
             deleteBtn: document.getElementById('delete-article')
         };
-        
-        // توابع اصلی
-        
+
         /**
          * نمایش Loader
          */
@@ -564,8 +560,7 @@
                 `;
                 elements.articlesTableBody.appendChild(tr);
             });
-            
-            // اضافه کردن event listeners برای دکمه‌ها
+
             document.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', () => editArticle(btn.dataset.id));
             });
@@ -601,11 +596,9 @@
          * نمایش فرم مقاله (جدید یا ویرایش)
          */
         function showArticleForm(article = null) {
-            // ریست فرم
             elements.articleForm.reset();
             
             if (article) {
-                // پر کردن فرم با اطلاعات مقاله
                 document.getElementById('article-id').value = article.id;
                 document.getElementById('title').value = article.title;
                 document.getElementById('category').value = article.category;
@@ -615,7 +608,6 @@
                 document.getElementById('image_url').value = article.image_url || '';
                 document.getElementById('author_image_url').value = article.author_image_url || '';
                 
-                // نمایش تصاویر اگر وجود دارند
                 const imagePreview = document.getElementById('image-preview');
                 if (article.image_url) {
                     imagePreview.src = article.image_url;
@@ -634,16 +626,13 @@
                 elements.formTitle.textContent = 'مقاله جدید';
                 elements.deleteBtn.style.display = 'none';
                 
-                // مخفی کردن پیش‌نمایش تصاویر
                 document.getElementById('image-preview').style.display = 'none';
                 document.getElementById('author-image-preview').style.display = 'none';
             }
             
-            // نمایش فرم و مخفی کردن لیست
             elements.articlesList.classList.add('hidden');
             elements.articleFormContainer.classList.remove('hidden');
             
-            // به‌روزرسانی لینک‌های ناوبری
             document.getElementById('view-articles-link').classList.remove('active');
             document.getElementById('add-article-link').classList.add('active');
         }
@@ -764,7 +753,6 @@
          * راه‌اندازی اولیه
          */
         document.addEventListener('DOMContentLoaded', () => {
-            // رویدادهای کلیک
             document.getElementById('add-new-article').addEventListener('click', () => showArticleForm());
             document.getElementById('back-to-list').addEventListener('click', showArticlesList);
             document.getElementById('view-articles-link').addEventListener('click', (e) => {
@@ -780,16 +768,13 @@
                 showArticlesList();
             });
             
-            // رویداد فرم
             elements.articleForm.addEventListener('submit', saveArticle);
             
-            // رویداد حذف
             elements.deleteBtn.addEventListener('click', () => {
                 const id = document.getElementById('article-id').value;
                 if (id) confirmDeleteArticle(id);
             });
             
-            // پیش‌نمایش تصاویر هنگام تغییر لینک
             document.getElementById('image_url').addEventListener('input', (e) => {
                 const img = document.getElementById('image-preview');
                 img.src = e.target.value;
@@ -807,8 +792,7 @@
                     this.src = 'https://via.placeholder.com/200x200?text=Author+Image+Not+Found';
                 };
             });
-            
-            // بارگیری اولیه مقالات
+
             fetchArticles();
         });
     </script>
