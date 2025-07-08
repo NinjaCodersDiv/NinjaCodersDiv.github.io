@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninja Coders | مدیریت مقالات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Vazirment';
+            src: url('Vazirmatn-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirment', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            line-height: 1.6;
+            text-align: justify;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Loader */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* هدر */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-left: 10px;
+        }
+        
+        /* منوی ناوبری */
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav ul li {
+            margin-right: 15px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        nav ul li a:hover,
+        nav ul li a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* بخش مدیریت */
+        .admin-panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* فرم مقاله */
+        .article-form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #1a252f;
+        }
+        
+        /* جدول مقالات */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        /* پیش‌نمایش تصویر */
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* ریسپانسیو */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- هدر -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo" id="home-link">
+                <i class="fas fa-code"></i>
+                Ninja Coders | مدیریت مقالات
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" id="view-articles-link" class="active">مقالات</a></li>
+                    <li><a href="#" id="add-article-link">مقاله جدید</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- بخش اصلی محتوا -->
+    <main class="container" id="app">
+        <!-- لیست مقالات -->
+        <div id="articles-list">
+            <div class="admin-panel">
+                <div class="admin-header">
+                    <h2>مدیریت مقالات</h2>
+                    <button class="btn btn-primary" id="add-new-article">مقاله جدید</button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>تصویر</th>
+                                <th>عنوان</th>
+                                <th>دسته‌بندی</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="articles-table-body">
+                            <!-- مقالات اینجا نمایش داده می‌شوند -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- فرم مقاله -->
+        <div id="article-form-container" style="display: none;">
+            <div class="admin-panel">
+                <div class="admin-header">
+                    <h2 id="form-title">مقاله جدید</h2>
+                    <button class="btn btn-secondary" id="back-to-list">بازگشت به لیست</button>
+                </div>
+                
+                <form id="article-form" class="article-form">
+                    <input type="hidden" id="article-id">
+                    
+                    <div class="form-group">
+                        <label for="title">عنوان مقاله</label>
+                        <input type="text" class="form-control" id="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">دسته‌بندی</label>
+                        <input type="text" class="form-control" id="category" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="excerpt">خلاصه مقاله</label>
+                        <textarea class="form-control" id="excerpt" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content">محتوا</label>
+                        <textarea class="form-control" id="content" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="author">نویسنده</label>
+                        <input type="text" class="form-control" id="author" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="image">تصویر مقاله</label>
+                        <input type="file" class="form-control" id="image" accept="image/*">
+                        <img id="image-preview" class="image-preview">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="authorImage">تصویر نویسنده</label>
+                        <input type="file" class="form-control" id="authorImage" accept="image/*">
+                        <img id="author-image-preview" class="image-preview">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="save-article">ذخیره</button>
+                        <button type="button" class="btn btn-danger" id="delete-article" style="display: none;">حذف مقاله</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // تنظیمات API
+        const API_BASE_URL = 'https://ninja-api-w1ch.onrender.com';
+        
+        // DOM Elements
+        const loader = document.getElementById('loader');
+        const articlesList = document.getElementById('articles-list');
+        const articleFormContainer = document.getElementById('article-form-container');
+        const articlesTableBody = document.getElementById('articles-table-body');
+        const articleForm = document.getElementById('article-form');
+        const formTitle = document.getElementById('form-title');
+        const addNewArticleBtn = document.getElementById('add-new-article');
+        const backToListBtn = document.getElementById('back-to-list');
+        const saveArticleBtn = document.getElementById('save-article');
+        const deleteArticleBtn = document.getElementById('delete-article');
+        const viewArticlesLink = document.getElementById('view-articles-link');
+        const addArticleLink = document.getElementById('add-article-link');
+        const homeLink = document.getElementById('home-link');
+        
+        // نمایش Loader
+        function showLoader() {
+            loader.style.display = 'flex';
+            loader.style.opacity = '1';
+        }
+        
+        // مخفی کردن Loader
+        function hideLoader() {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+        
+        // دریافت مقالات از API
+        async function fetchArticles() {
+            showLoader();
+            try {
+                const response = await fetch(`${API_BASE_URL}/articles/`);
+                if (!response.ok) {
+                    throw new Error('خطا در دریافت مقالات');
+                }
+                const articles = await response.json();
+                renderArticlesTable(articles);
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        // نمایش مقالات در جدول
+        function renderArticlesTable(articles) {
+            articlesTableBody.innerHTML = '';
+            
+            if (articles.length === 0) {
+                articlesTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center">مقاله‌ای یافت نشد</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            articles.forEach(article => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${article.image}" alt="${article.title}" style="width: 80px; height: 50px; object-fit: cover;"></td>
+                    <td>${article.title}</td>
+                    <td>${article.category}</td>
+                    <td>${article.date}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-sm btn-primary edit-article" data-id="${article.id}">ویرایش</button>
+                        <button class="btn btn-sm btn-danger delete-article" data-id="${article.id}">حذف</button>
+                    </td>
+                `;
+                articlesTableBody.appendChild(tr);
+            });
+            
+            // اضافه کردن event listener برای دکمه‌های ویرایش و حذف
+            document.querySelectorAll('.edit-article').forEach(btn => {
+                btn.addEventListener('click', () => editArticle(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-article').forEach(btn => {
+                btn.addEventListener('click', () => confirmDeleteArticle(btn.dataset.id));
+            });
+        }
+        
+        // نمایش فرم مقاله جدید
+        function showAddArticleForm() {
+            articleForm.reset();
+            document.getElementById('article-id').value = '';
+            formTitle.textContent = 'مقاله جدید';
+            deleteArticleBtn.style.display = 'none';
+            
+            articlesList.style.display = 'none';
+            articleFormContainer.style.display = 'block';
+            
+            // Reset image previews
+            document.getElementById('image-preview').style.display = 'none';
+            document.getElementById('author-image-preview').style.display = 'none';
+            
+            // Update active nav link
+            viewArticlesLink.classList.remove('active');
+            addArticleLink.classList.add('active');
+        }
+        
+        // نمایش فرم ویرایش مقاله
+        async function editArticle(articleId) {
+            showLoader();
+            try {
+                const response = await fetch(`${API_BASE_URL}/articles/${articleId}`);
+                if (!response.ok) {
+                    throw new Error('خطا در دریافت مقاله');
+                }
+                const article = await response.json();
+                
+                // پر کردن فرم با اطلاعات مقاله
+                document.getElementById('article-id').value = article.id;
+                document.getElementById('title').value = article.title;
+                document.getElementById('category').value = article.category;
+                document.getElementById('excerpt').value = article.excerpt;
+                document.getElementById('content').value = article.content;
+                document.getElementById('author').value = article.author;
+                
+                // نمایش پیش‌نمایش تصاویر
+                const imagePreview = document.getElementById('image-preview');
+                imagePreview.src = article.image;
+                imagePreview.style.display = 'block';
+                
+                const authorImagePreview = document.getElementById('author-image-preview');
+                authorImagePreview.src = article.authorImage;
+                authorImagePreview.style.display = 'block';
+                
+                formTitle.textContent = 'ویرایش مقاله';
+                deleteArticleBtn.style.display = 'inline-block';
+                
+                articlesList.style.display = 'none';
+                articleFormContainer.style.display = 'block';
+                
+                // Update active nav link
+                viewArticlesLink.classList.remove('active');
+                addArticleLink.classList.add('active');
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        // تایید قبل از حذف مقاله
+        function confirmDeleteArticle(articleId) {
+            if (confirm('آیا از حذف این مقاله مطمئن هستید؟')) {
+                deleteArticle(articleId);
+            }
+        }
+        
+        // حذف مقاله
+        async function deleteArticle(articleId) {
+            showLoader();
+            try {
+                const response = await fetch(`${API_BASE_URL}/articles/${articleId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('خطا در حذف مقاله');
+                }
+                
+                alert('مقاله با موفقیت حذف شد');
+                fetchArticles();
+                showArticlesList();
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        // نمایش لیست مقالات
+        function showArticlesList() {
+            articlesList.style.display = 'block';
+            articleFormContainer.style.display = 'none';
+            
+            // Update active nav link
+            viewArticlesLink.classList.add('active');
+            addArticleLink.classList.remove('active');
+        }
+        
+        // ارسال فرم مقاله
+        async function submitArticleForm(e) {
+            e.preventDefault();
+            showLoader();
+            
+            const articleId = document.getElementById('article-id').value;
+            const formData = new FormData();
+            
+            // اضافه کردن فیلدهای متنی
+            formData.append('title', document.getElementById('title').value);
+            formData.append('category', document.getElementById('category').value);
+            formData.append('excerpt', document.getElementById('excerpt').value);
+            formData.append('content', document.getElementById('content').value);
+            formData.append('author', document.getElementById('author').value);
+            
+            // اضافه کردن فایل‌های تصویر
+            const imageFile = document.getElementById('image').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+            
+            const authorImageFile = document.getElementById('authorImage').files[0];
+            if (authorImageFile) {
+                formData.append('authorImage', authorImageFile);
+            }
+            
+            try {
+                let response;
+                if (articleId) {
+                    // ویرایش مقاله موجود
+                    response = await fetch(`${API_BASE_URL}/articles/${articleId}`, {
+                        method: 'PUT',
+                        body: formData
+                    });
+                } else {
+                    // ایجاد مقاله جدید
+                    response = await fetch(`${API_BASE_URL}/articles/`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'خطا در ذخیره مقاله');
+                }
+                
+                const result = await response.json();
+                alert(`مقاله با موفقیت ${articleId ? 'ویرایش' : 'ذخیره'} شد`);
+                
+                fetchArticles();
+                showArticlesList();
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+        // پیش‌نمایش تصاویر قبل از آپلود
+        function setupImagePreviews() {
+            document.getElementById('image').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const preview = document.getElementById('image-preview');
+                        preview.src = event.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            document.getElementById('authorImage').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const preview = document.getElementById('author-image-preview');
+                        preview.src = event.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // مخفی کردن loader پس از لود کامل صفحه
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 500);
+            
+            // تنظیم event listenerها
+            addNewArticleBtn.addEventListener('click', showAddArticleForm);
+            backToListBtn.addEventListener('click', showArticlesList);
+            articleForm.addEventListener('submit', submitArticleForm);
+            deleteArticleBtn.addEventListener('click', function() {
+                const articleId = document.getElementById('article-id').value;
+                if (articleId) {
+                    confirmDeleteArticle(articleId);
+                }
+            });
+            
+            viewArticlesLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showArticlesList();
+            });
+            
+            addArticleLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showAddArticleForm();
+            });
+            
+            homeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showArticlesList();
+            });
+            
+            // تنظیم پیش‌نمایش تصاویر
+            setupImagePreviews();
+            
+            // بارگیری اولیه مقالات
+            fetchArticles();
+        });
+    </script>
+</body>
+</html>
