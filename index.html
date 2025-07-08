@@ -573,10 +573,6 @@
     <!-- هدر -->
     <header>
         <div class="container header-container">
-            <div class="hamburger-menu" id="hamburger-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-            
             <a href="#" class="logo" id="home-link">
                 <i class="fas fa-code"></i>
                 Ninja Coders
@@ -946,13 +942,9 @@
             const articlesGrid = document.getElementById('articles-grid');
             const viewArticlesBtn = document.getElementById('view-articles-btn');
             const homeLink = document.getElementById('home-link');
-            const navHome = document.getElementById('nav-home');
-            const navArticles = document.getElementById('nav-articles');
             const backToArticles = document.getElementById('back-to-articles');
             const backToArticlesBottom = document.getElementById('back-to-articles-bottom');
-            const hamburgerMenu = document.getElementById('hamburger-menu');
-            const mainNav = document.getElementById('main-nav');
-
+            
             // Render articles
             function renderArticles() {
                 articlesGrid.innerHTML = '';
@@ -998,7 +990,6 @@
 
                 homePage.style.display = 'none';
                 articlePage.classList.add('active');
-                mainNav.classList.remove('active');
                 window.scrollTo(0, 0);
             }
 
@@ -1006,36 +997,18 @@
             function showHome() {
                 homePage.style.display = 'block';
                 articlePage.classList.remove('active');
-                mainNav.classList.remove('active');
                 window.scrollTo(0, 0);
-            }
-
-            // Toggle mobile menu
-            function toggleMenu() {
-                mainNav.classList.toggle('active');
             }
 
             // Event listeners
             viewArticlesBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 document.querySelector('.articles').scrollIntoView({ behavior: 'smooth' });
-                mainNav.classList.remove('active');
             });
 
             homeLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 showHome();
-            });
-
-            navHome.addEventListener('click', (e) => {
-                e.preventDefault();
-                showHome();
-            });
-
-            navArticles.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelector('.articles').scrollIntoView({ behavior: 'smooth' });
-                mainNav.classList.remove('active');
             });
 
             backToArticles.addEventListener('click', (e) => {
@@ -1046,16 +1019,7 @@
             backToArticlesBottom.addEventListener('click', (e) => {
                 e.preventDefault();
                 showHome();
-            });
-
-            hamburgerMenu.addEventListener('click', toggleMenu);
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('#main-nav') && !e.target.closest('#hamburger-menu')) {
-                    mainNav.classList.remove('active');
-                }
-            });
+            })
 
             // Initial render
             renderArticles();
